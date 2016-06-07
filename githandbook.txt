@@ -1,0 +1,517 @@
+·△git:
+·git config --global user.name "Your Name"
+·git config --global user.email "email@example.com"
+Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
+·git init把这个目录变成Git可以管理的仓库。
+·git add readme.txt：“git add <file>”命令git add 告诉Git， 把文件添加到仓库。 可以多次add不同的文件， 然后commit可以一次提交所有add过的文件。
+·git commit -m "wrote a readme file"：用命令git commit 告诉Git， 把文件提交到仓库。 -m后面输入的是本次提交的说明。
+·git commit -a 命令。 -a 的意思是告诉git先将变更了的文件先载入（stage）
+git commit -am ""：add + commit
+	--amend:git commit --amend 将暂存区的文件提交到上一次 commit 中，并将上一次的 commit 快照替换为两次改动合并一起的快照。
+·git status 查看文件状态
+	git status -s 命令或 git status --short 命令，你将得到一种更为紧凑的格式输出。
+	新添加到暂存区中的文件前面有 A 标记;
+	修改过的文件前面有 M 标记;
+	 M 有两个可以出现的位置，出现在右边的 M 表示该文件被修改了但是还没放入暂存区，出现在靠左边的 M 表示该文件被修改了并放入了暂存区。
+·git log：查看提交(commit)历史记录。包含 commitid、author(name email)、date，如果是 merge 产生的 commit 还有 merge 信息。 修改的文件名默认不显示。
+    --graph 查看图形化信息。
+    --stat 查看每次提交中修改的文件(名) 查看每次提交中的简要信息。
+    git log commitid -p -1  
+        -p 查看每次 commit 中的详情。
+        -[num]查看当前向后 commitid 的数量。
+    git log commitid  查看commitid 及其之前的 log。
+    git log --all --graph --decorate --oneline
+        --decorate 显示分支所指向的版本(HEAD指向的 commitid)；
+        --graph 图形显示
+        --oneline 单行显示。相对不加该参数，显示区别包括 commitid显示开头几位； Author、Date 不显示；显示 commit message的第一行;
+        显示关键信息可以用 “git log --pretty=oneline”
+    git log -p -num <filename> 查看文件的修改记录
+			sample:git log -p -10 "node-app/i18n/zh.json" 用于查看最近十次 zh.json 修改记录
+		
+·git reflog：查看版本库的操作命令历史记录， 可以用来找到版本号。 每条 commit log 的最开头即为 commit id 。
+·git rm <filename>：移除文件。git rm file+git commit -m "remove file"==从版本库删除该文件。
+·git diff HEAD -- readme.txt： 命令可以查看工作区和版本库里面最新版本的区别。
+·git diff <本地分支名> <远程分支名>： git diff master origin/master 对比本地分支和远程分支的差异。
+    git diff 工作区和暂存区的区别 如果暂存区没有提交，则比较的是工作区和 storage 的区别。
+        -p：打印细节
+        -w:忽略空白产生的 diff。
+       注：每次 pull 的代码合并的是工作区的代码，而非暂存区和版本区。
+    git diff --staged(--cached 同意同理) 暂存区与版本区(HEAD)的区别 
+    git diff -- node-app/i18n/en.json 查看单独文件的改动
+		git diff <commitid1> <commitid2> --name-only：对比两次提交的差异。使用–name-only参数可以只显示文件名。
+·git checkout -- <file>： 丢弃工作区的修改， 恢复到暂存区状态， 若暂存区没有更改， 则是恢复到版本库的状态.git checkout -- file 命令中的 “--” 很重要， 没有--， 就变成了 “切换到另一个分支” 的命令。 如果git是只记录修改， 那么暂存库的修改状态则是checkout的关联状态。 问题:"暂存库的状态如果提交后，暂存库中就没有修改状态了吗？所以才有所谓的，如果暂存库有最新未提交修改，则checkout是将工作区的内容回到暂存区的修改状态？"
+·git reset HEAD <file>：可以把文件在暂存区的修改撤销掉（unstage）， 重新放回工作区。git reset 命令既可以回退版本， 也可以把暂存区的修改回退到工作区。 当我们用HEAD时，表示最新的版本。
+·git reset --hard <commit id>/HEAD^/HEAD^^： 回退到指定版本。
+问题：reset只是针对暂存区的吗？或者只有加--hard才会回退修改版本库？
+·Shell/Git Bash 输入命令：$ ssh-keygen -t rsa -C "youremail@example.com"。 用来建立本地私钥和公钥。
+·git remote add origin git@github.com:GitHubUserName/learngit.git 在本地仓库运行该命令。 把本地的内容关联到远程库。 远程库的名字就是origin。
+·git remote show <主机名> 查看该主机的详细信息,包括 tracking 信息。
+$ git remote add <主机名> <网址> 命令用于添加远程主机。
+$ git remote rm <主机名> 命令用于删除远程主机。
+$ git remote rename <原主机名> <新主机名> 命令用于远程主机的改名。 
+·git push -u origin master： 关联后，使用命令第一次推送master分支的所有内容；
+·git push origin master： 第一次推送以后， 每次本地提交后， 只要有必要， 就可以使用命令推送最新修改；
+·git checkout dev： 切换到dev分支。
+    如果当下的工作区或暂存区有东西没有提交，git 会禁止你切分支。
+·git checkout -b dev： 命令加上 –b 参数表示创建并切换到dev分支。
+·git checkout -b sf origin/serverfix：创建 tracking 分支。创建分支 sf,并将其 tracking 到远分 serverfix。
+git checkout -f [branchname]：强行切换到相应分支。当下未提交的内容将不能被保存。
+·git branch： 查看所有分支。
+    git branch>>显示本地分支
+    git branch -r>>显示远程跟踪分支
+    git branch -vv：列出本地分支的tracking 远程和分支信息和其相对远分是提前(本地有 commits)还是滞后(远程仓库有commit)。
+    git branch -v：列出本地分支的本地相关信息
+
+git checkout --track origin/serverfix：把本地的同名分支(serverfix) track 到远程 serverfix 分支。
+    如果本地没有 serverfix 分支，则可再运行 git checkout serverfix.
+    如果想要建立和远程分支不同名的本地关联分支可以通过如下命令：
+    git checkout -b sf origin/serverfix：建立本地分支sf 关联到远程分支 serverfix。
+git checkout -b [branch] [remotename]/[branch]：创建和远程branch 关联（tracking）的分支，并切到该分支。
+·git branch dev： 创建dev 分支。
+·git branch -d dev： 删除dev分支。
+git branch [-u||--set-upstream-to] [remote]/[branchname]:为当下分支(已有分支)设置关联到远程的分支，若已有tracking 则重关联，否则新增。
+    eg:git branch -u origin/serverfix
+    >可以通过@{u}或@{upstream}来引用upstream branch（远程关联分支）。如可以使用 git merge @{u}来代替 git merge origin/serverfix。
+·git merge dev： 到相应的分支上，把dev分支合并到当下分支中。
+·git merge –no-ff  -m "注释" dev： 使用非fastforward模式提交。
+·git stash： 把当前工作现场 ”隐藏起来”，等以后恢复现场后继续工作。
+·git stash list： 来查看工作现场。
+·git stash apply： 恢复，恢复后，stash内容并不删除。
+·git stash drop： 删除隐藏的工作现场，每运行一次。
+·git stash pop: 恢复工作现场，并删掉stash内容。
+·git remote： 远程库的信息
+·git remote –v： 远程库的详细信息
+·git branch命令的-r选项，可以用来查看远程分支，-a选项查看所有分支。
+·git fetch <远程主机名> ：将某个远程主机的更新，全部取回本地。取回所有分支（branch）的更新哟。
+·git fetch <远程主机名> <分支名>： 取回特定分支的更新，可以指定分支名。
+.git fetch --all：从远仓取所有分支的代码。
+·git clone https://github.com/tugenhua0707/testgit 从远程库中克隆。
+·git push <仓库名> <分支名>： 将分支dev推送的远程库。
+	将当前分支推到远程同名分支： git push . cheng
+·git push 远程仓库名 <本地分支名>:<远程分支名>:将本地分支数据推送到远程分支，并且关联到远程分支（turn into upstream branch）。
+	把 upstream branch 推到远程指定分支(chan)使用（To push to the upstream branch on the remote, use）：git push . HEAD:chan
+·git push origin :<远程分支名>  删除远程分支。
+·git push origin --delete serverfix：删除远程分支 serverfix。
+·git pull [remote] [remotebranchname]:[localbranchname] ：下载数据并与本地分支合并，若在当下分支，则冒号及后面本地分支名可以省略。
+.git branch dev;(创建分支)git fetch origin/hw-dev dev;//将远程分支内容取到本地分支 dev 上。
+·git tag：指向某个分支的一个点
+    git tag v1.4-lw：创建 lightWeight标签。不需要其他参数。
+        git show v1.4-lw：显示v1.4-lw的标签信息。
+    git tag -a v1.1：创建标签是 v1.1的 annotated标签。-a表示创建的是 annotated 标签。
+    git tag -a v1.1 -m "create v1.1"：-m表示添加标签信息。
+    git tag：查找 tag。
+    git tag -l "v1.8.5*":列出开头为 v1.8.5的所有标签。
+    git push origin [tagname||--tag]：--tag表示分享所有标签
+git rebase：
+
+·△git原理：
+1>工作区和暂存区
+工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。
+Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。HEAD始终指向当前版本。
+把文件往Git版本库里添加的时候，是分两步执行的：
+第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+创建Git版本库时，Git自动为我们创建了唯一一个master分支，所以，现在，git commit 就是往 master 分支上提交更改。
+工作区中没有被add的文件，其在git的状态中为“Untracked files”.
+
+2>版本回退
+版本号(commit id)是一个SHA1计算出来的非常大的数字， 用十六进制表示。 每提交一个新版本， 实际上Git就会把它们自动串成一条时间线。 如果使用可视化工具查看Git历史， 就可以更清楚地看到提交历史的时间线。
+在Git中，用HEAD表示当前版本。上一个版本就是HEAD^，上上一个版本就是HEAD^^，三个及以上则用另一个写法，如第100个版本写成HEAD~100。
+退回到上一个版本命令示例：$ git reset --hard HEAD^。使用该方法回退后，最新版本(head) 指向最近回退的版本。如果还想回退到之前的最新的版本，可以通过 git reset --hard commitID.如：$ git reset --hard 3628164。
+版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了。
+Git的版本回退速度非常快，因为Git在内部有个指向当前版本的HEAD指针，当你回退版本的时候，Git仅仅是把HEAD从当下版本指向命令中所输入的版本。然后顺便把工作区的文件更新了。所以你让HEAD指向哪个版本号，你就把当前版本定位在哪。
+    2.1>关于版本号
+    commitid 是SHA-1(Secure Hash Algorithm)算出。
+
+3>管理修改
+Git跟踪并管理的是修改，而非文件。
+Git命令git commit 会将提交到暂存区的修改提交， 但是仅在工作区的修改不会被 commit 到版本库中。
+
+4>撤销修改
+命令git checkout -- readme.txt 意思就是， 把 readme.txt 文件在工作区的修改全部撤销， 这里有两种情况：
+一种是readme.txt 自修改后还没有被放到暂存区， 现在， 撤销修改就回到和版本库一模一样的状态；
+一种是readme.txt 已经添加到暂存区后， 又作了修改， 现在， 撤销修改就回到添加到暂存区后的状态。
+还有git reset 命令既可以回退版本， 也可以把暂存区的修改回退到工作区。 当我们用HEAD时， 表示最新的版本。
+
+5>删除文件
+git rm -f <file> test.txt： 强制删除工作区或暂存区的指定名称文件。
+"git rm test.txt" + "git commit -m 'remove test.txt'"： 从版本库删除该文件。
+
+·△git 远程仓库
+Git是分布式版本控制系统，同一个Git仓库，可以分布到不同的机器上。而且每台机器的版本库其实都是一样的， 并没有主次之分。
+
+分布实际操作：
+实际情况往往是这样，找一台电脑充当服务器的角色，每天24小时开机，其他每个人都从这个“服务器”仓库克隆一份到自己的电脑上，并且各自把各自的提交推送到服务器仓库里，也从服务器仓库中拉取别人的提交。完全可以自己搭建一台运行Git的服务器。GitHub提供Git仓库托管服务的，所以，只要注册一个GitHub账号，就可以免费获得Git远程仓库。
+
+
+
+·△git 添加远程仓库
+本地Git仓库和GitHub仓库(远程仓库)： 传输是通过“SSH加密”的，
+Git仓库和GitHub仓库之间传输因是ssh加密，所以需要一点设置：
+第1步：SSH Key。 
+    主目录下有无.ssh，.ssh目录下有没有 id_rsa 和 id_rsa.pub 这两个文件。 有则已创建。
+    创建： Shell/Git Bash 输入命令：$ ssh-keygen -t rsa -C "youremail@example.com"
+    然后一路回车，使用默认值即可，由于这个Key也不是用于军事目的，所以也无需设置密码。
+    id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
+第2步：登陆GitHub， 打开“Account settings”， “SSH Keys”页面：然后，点“Add SSH Key”， 填上任意Title， 在Key文本框里粘贴id_rsa.pub文件的内容， 点“Add Key”， 你就应该看到已经添加的Key。
+·SSH Key公钥不在账户列表中(远程仓库的账户列表中)则无权推送。
+·git remote add origin git@github.com:GitHubUserName/learngit.git 把本地的内容关联到远程库。 远程库的名字就是origin。 这是Git默认的叫法， 也可以改成别的， 但是origin这个名字一看就知道是远程库。
+·本地库的所有内容推送到远程库上： $ git push -u origin master。 实际上是把当前分支master推送到远程。
+由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+从现在起，只要本地作了提交，就可以通过命令： $ git push origin master。
+
+
+·△git 远程库克隆
+git clone <远程库地址|https://github.com/tugenhua0707/testgit>
+
+·△git 创建与合并分支
+截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即master分支。HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。
+git checkout 命令加上 –b参数表示创建并切换，如切换到dev分支上： “git checkout -b dev”。 该条命令相当于如下两条命令： 
+    git branch dev
+    git checkout dev
+git checkout -b dev origin/dev 创建远程分支到本地(并关联)
+git branch查看分支，会列出所有的分支，当前分支前面会添加一个星号。
+当下处在dev分支上，如果想要切到master，则可以使用命令： git checkout master。
+问题： 分支可以衍生分支吗？ 切换分支的时候，是否会将暂存库未来得及commit的内容移除？
+把dev分支上的内容合并到分支master上了，可以在master分支上，使用如下命令 git merge dev 。  命令git bash提示“Fast-forward”信息，Git告诉我们，这次合并是“快进模式”，也就是直接把master指向dev的当前提交，所以合并速度非常快。” 合并后dev 还是在那里滴~如果要删除分支，执行命令 “git branch -d dev”。 
+
+·△git 解决冲突
+Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容，其中<<<HEAD是指主分支修改的内容，>>>>>fenzhi1 是指fenzhi1上修改的内容。
+merge时产生冲突，修改冲突后，分支合并完成。 至于被被合并的那个分支依然处于之前的状态。
+
+·△git 分支管理策略
+合并分支时，git一般使用”Fast forward”模式，在这种模式下，删除分支后，会丢掉分支信息。我们来使用带参数 –no-ff来禁用”Fast forward”模式。使用命令(合并dev分支)： git merge –no-ff  -m "注释" dev 。 
+分支策略：首先master主分支应该是非常稳定的，也就是用来发布新版本，一般情况下不允许在上面干活，干活一般情况下在新建的dev分支上干活，干完后，比如上要发布，或者说dev分支代码稳定后可以合并到主分支master上来。
+
+·△git 临时分支
+在Git中，分支是很强大的，每个bug都可以通过一个临时分支来修复，修复完成后，合并分支，然后将临时的分支删除掉。
+git stash 把当前工作现场 ”隐藏起来”，等以后恢复现场后继续工作。
+问题：这种隐藏行为是只针对工作区还是包括暂存区？（示例中是工作区的部分）
+思考： 是因为在切换分支的时候回把工作区的内容抹除， 所以才有git stash， 以便在切回该工作分支的时候， 工作区的内容还在。
+使用命令 git stash list 来查看工作现场。 Git把stash内容存在某个地方了，但是需要恢复一下，可以使用如下2个方法：
+    git stash apply恢复，恢复后，stash内容并不删除，你需要使用命令git stash drop来删除。
+    另一种方式是使用git stash pop,恢复的同时把stash内容也删除了。
+
+·△git 多人协作
+当你从远程库克隆时候，实际上Git自动把本地的master分支和远程的master分支对应起来了，并且远程库的默认名称是origin。
+    要查看远程库的信息 使用 git remote
+    要查看远程库的详细信息 使用 git remote –v
+1>推送分支
+推送分支就是把该分支上所有本地提交到远程库中，推送时，要指定本地分支，这样，Git就会把该分支推送到远程库对应的远程分支上：
+    使用命令 git push origin master 把master分支推到远程仓库(服务器)origin上。
+一般分支推送注意：
+    master分支是主分支，因此要时刻与远程同步。
+    一些修复bug分支不需要推送到远程去，可以先合并到主分支上，然后把主分支master推送到远程去。
+2>抓取分支
+克隆远程的库到本地后，要在dev分支上做开发， 就必须把远程的origin的dev分支到本地来， 于是可以使用命令创建本地dev分支：git checkout  –b dev origin/dev。
+待完成后依旧通过 git push <remoteRegistoryName> <branchName>推到远程服务器。
+提交产生冲突：
+    我的小伙伴最新提交的和我试图推送的有冲突，解决的办法也很简单， 上面已经提示我们， 先用git pull 把最新的提交从origin/dev抓下来， 然后在本地合并，解决冲突，再推送。
+    git pull： 命令执行后，git会在本地执行自动合并行为。   
+总结：因此：多人协作工作模式一般是这样的：
+首先，可以试图用git push origin branch-name推送自己的修改.
+如果推送失败，则因为远程分支比你的本地更新早，需要先用git pull试图合并。
+如果合并有冲突，则需要解决冲突，并在本地提交。再用git push origin branch-name推送。   
+3>git pull专门
+git pull命令的作用是， 取回远程主机某个分支的更新， 再与本地的指定分支合并。 它的完整格式稍稍有点复杂。
+$ git pull <远程主机名> <远程分支名>:<本地分支名>。
+比如， 取回origin主机的next分支， 与本地的master分支合并， 需要写成下面这样。
+$ git pull origin next:master。
+如果远程分支是与当前分支合并，则冒号后面的部分可以省略。
+$ git pull origin next。
+上面命令表示， 取回origin/next分支， 再与当前分支合并。 实质上， 这等同于先做git fetch， 再做git merge。
+$ git fetch origin
+$ git merge origin/next
+在某些场合， Git会自动在本地分支与远程分支之间，建立一种追踪关系(tracking)。 比如， 在git clone的时候， 所有本地分支默认与远程主机的同名分支， 建立追踪关系， 也就是说， 本地的master分支自动”追踪”origin/master分支。
+Git也允许手动建立追踪关系。
+git branch --set-upstream master origin/next
+上面命令指定master分支追踪origin/next分支。
+如果当前分支与远程分支存在追踪关系，git pull就可以省略远程分支名。
+$ git pull origin
+上面命令表示，本地的当前分支自动与对应的origin主机”追踪分支”(remote-tracking branch)进行合并。
+如果当前分支只有一个追踪分支，连远程主机名都可以省略。
+
+深入：
+分支：本地分支(local branch)\远程跟踪分支(Remote-tracking branches)
+git branch>>显示本地分支
+git branch -r>>显示远程跟踪分支
+（“远程名称”是一个代码仓库别名，和本地目录或URL是一个含义，你可以通过"git remote"命令自由定义额外的“远程名称”。但“git clone”命令默认使用的是“origin”这个名称。）
+使用git fetch 更新远端跟踪分支。
+
+如果你想基于远程跟踪分支创建本地分支（在本地分支上工作）,你可以使用如下命令：git branch –track 或 git checkout –track -b， 两个命令都可以让你切换到新创建的本地分支。例如你用git branch -r命令看到一个远程跟踪分支的名称为“origin/refactored”是你所需要的，你可以使用下面的命令：
+    git checkout --track -b refactored origin/refactored
+在上面的命令里，“refactored”是这个新分支的名称，“origin/refactored”则是现存远程跟踪分支的名称。（在git最新的版本里，例子中‘-track’选项已经不需要了，如果最后一个参数是远程跟踪分支，这个参数会被默认加上。）
+
+track 篇：
+	tracking branch : 本地分支，该分支已经直连到远程分支。
+	upstream branch : tracking branch 所跟踪的远程分支成为 upstream branch。
+	command:
+		git checkout —-track origin/serverfix 设置当下分支跟踪到远程分支 serverfix。
+		git checkout -b localbranchname origin/remotebranchname :  创建一个跟踪到远程分支的本地分支，并转到该分支(默认远程仓短名为 origin).
+		git pull origin $something:$current_branch : 创建一个into an unborn branch
+		
+从远端仓库进行更新
+如果我想从远端的源仓库更新到本地的代码仓库，可以输入“git fetch origin”的命令。
+
+证书：
+	git config —global credential.helper [ cache | store ]
+	默认不缓存，每次都需要输入用户名和密码。可以通过设置 credential.helper 来对密码进行缓存或保持等处理。
+	有效期：
+		cache:15minutes;
+		store:forever;
+		osxkeychain:mac only.把证书缓存在系统的密钥里面，证书存在硬盘里，永不过期;
+		winced:windows only,the same as osxkeychain on mac;
+
+git checkout -b|alt 分支名 分支路径： 创建本地分支。
+git checkout --track -b <您本地为新分支建名> <远程跟踪分支名称>：git checkout --track -b refactored origin/refactored
+假设你对 “experimental”分支做了变更并且希望把他push到"origin"远程仓库中去. 你可以这样做:
+git push origin experimental。
+“git fetch” 命令执行完毕之后， 还不会立即将下载的文件合并到你当前工作目录里， 这就给你了一个选择下一步操作的机会， 要是想将从远程分支下载的文件更新到你的工作目录里， 你需要执行一个“合并（merge）”操作。 例如，我当前的本地分支为”master“（执行git checkout master后）， 这时我想执行合并操作：git merge origin/master。
+( 几句题外话： 合并的时候有可能你还没有对远程分支提交过任何的更改， 或者可能是一个复杂的合并。)
+
+clone后，远程仓库有的文件若修改且没有add，则状态为：Changes not staged for commit。提醒暂存以用于提交。
+
+why：
+fetch and mege instead of pull in git!
+虽然 git pull 大部分时候是好的， 特别是如果你用CVS类型的方式使用Git时， 它可能正适合你。 然而，如果你想用一个更地道的方式（建立很多主题分支，当你需要时随时改写本地历史，等等）使用Git，那么习惯把 git fetch 和 git merge 分开做会有很大帮助。
+
+
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+??
+_____________________git 研究强化------------------------------------------------
+<<<<<<git
+△git check
+	git checkout -b [branch name] 
+	>创建的新分支其继承的代码是当下分支所存储的代码。所有 log 也是继承过来。
+△git remote
+	查看所配置的远程服务的名称。
+	git remote -v
+	>查看git 所存储的用来读(fetch)写(push)的远程服务的地址和名称。 如果你有多个远程，这个命令将列出所有。
+	git remote add <shortname> <url>
+	>添加一个新的远程 git 仓库，并加上名称(shortname)以方便引用。 例如添加远程主代码库时，用以更新最新提交， 更新fork 的私仓代码。
+	>例如：git remote add pb https://github.com/paulboone/ticgit
+		>有了上一命令，下载上一远程仓库的所有信息时，可运行：git fetch pb.
+		>如果该远程仓的主分支为 master,则现在你可在本地进入 paul 的主分支通过 pb/master.你可以将其 merge 到你的分支中。
+△删除远程分支
+    git push <远仓名> --delete <分知名>：把远程仓库中的分支删除。
+        >git push origin --delete serverfix 删掉 origin 远仓红的 serverfix 分支。
+△git fetch vs git pull
+	git fetch [remote-name]
+	>命令将下载所有该远程项目中本地没有的数据。将下载该远程中的所有分支中的内容。
+	>如果你克隆一个仓库，git fetch origin 则是下载所克隆的仓库中自你克隆或上次 fetch 之后所有的的被 push 到该远程仓库的新内容。
+	>git fetch 只下载数据到本地仓库，但不会自动合并或更改你的工作内容。如果有必要，需得自己手动合并代码。
+	>如果当下的分支已经 track 了某远程分支，你可以使用 git pull命令实现自动下代码并合并远程分支到你当下分支。
+	>git pull <remote> <branch>
+	如果没有 tracking，则后面的两个参数不能缺。如果有 tracking 后面两个参数可以省，其直接从对应 tracking 的远分下载并以 fast-forward模式合并代码。（❤️什么事 fast-forward 模式？）git pull其行为表现与当下所处分支相关，不存在操作不与当下分支相关的跨分支行为。
+△git clone
+	>该命令将默认远程服务的名称设为 origin。
+	>该命令会让本地的主分支 track 到你克隆的那个远程主分支。如果你是在主分支中，运行 git pull 则可以直接从你所克隆的远程服务主分支下载并尽量自动地合并代码到你当下所工作的代码中。如果你是在其他分支中，并且该分支没有 tracking 到任何远程分支，则需要运行：git pull <remote> <branch>.
+△git pull
+	如果当下分支 tracking 到某 remote 分支，则可以直接运行，从远程下载代码并自动地与当前分支内容合并，如果遇到冲突，则修改冲突代码(<<<<head ==== >>>>新代码版本)后，把代码 commit到版本库.那之后远程算是怎么样?如果当下的分支不是主分支(或者不是 tracking 到相应的远程分支)，则无法 push 到远程分支。需要手动 merge到本地 tracking 到远程分支的主(或主分支)。
+	问题：
+	1》clone 的本地 git 工作区中，如果切换的是非 tracking 的分支，其运行 git push （不加参数）的时候，push 的是主分支中的内容？
+		-当前分支未有commit 时，同时当前分支滞后或与主分支齐头，且在 push 中不指定远程分支和本地分支时，push 默认推的是主分支（会不会是因为只有主分支有 tracking，试试 git push cells:cells）。所以得注意，在分支中这种随意的 push 很可能导致错误，因为主分支在没有fetch+merge 的情况下推送，很可能导致冲突。
+		-当前分支有 commit 时，则不默认，提醒设置远程分支、远程仓库名和 set-upstream 设置，从而实现可以不加远仓参数，直接提交。如果pull后面加上已经设置 tracking 的分支的分支名，则可以推送非工作区所在分支的分支如在 celli 分支推送 master：git pull origin master.
+		— 通仓库的远程分支会对本地分支交叉推送产生权限问题吗？
+	2》如何让分支 track 到某远程？
+        search key word:tracking.
+△git update upstream
+    1.  在 Fork 的代码库中添加上游代码库的 remote 源，该操作只需操作一次即可。
+    如: 其中# upstream 表示上游代码库名， 可以任意。
+    git remote add upstream https://github.scm.corp.ebay.com/montage/frontend-ui-workspace
+    2. 将本地的修改提交 commit
+    3. 在每次 Pull Request 前做如下操作，即可实现和上游版本库的同步。
+        3.1 ： git remote update upstream
+        3.2 ： git rebase upstream/{branch name}
+    需要注意的是在操作3.2之前，一定要将checkout到{branch name}所指定的branch，
+    如: git checkout develop
+    4. Push 代码到 Github
+    git push
+    ///////////////
+    forking
+    Forking工作流需要2个远程别名 —— 一个指向正式仓库，另一个指向开发者自己的服务端仓库。
+    git clone 会自动把远仓别名设为 origin。别名的名字可以任意命名，常见的约定是使用origin作为远程克隆的仓库的别名 （这个别名会在运行git clone自动创建），upstream（上游）作为正式仓库的别名。
+    在 clone 代码后，需要把自己私有仓库的代码跟远服务仓的代码同步。
+    git pull upstream master
+△分支切换中，不同分支间的关系
+	在 A 分支中的修改若只是 add，没有 commit，切分支到 B时，则会因为会重写相应文件而 致使切换行为被取消，不能切换。若 B中相应的文件没有过改动呐？
+△git push
+	1>git push -u origin master
+	首次推送需要加参数“-u”。
+	如果已经 tracking 了，则会自动推到所 tracking 的远程分支上。
+	2>git push [远仓名] [本分支名]
+	如果一个克隆的本地仓库有俩分支：“celli”,”master”。其中 master 是自动 tracking 到远程仓库主分支的本地分支。
+	如果目前在 celli 分支上，执行git push origin master.依旧会 push 本地分支 master 到master相应所 tracking 的远程分支上。⭐️
+	3>git push origin 本分支:远分支 这样子运行后，是否本分支 tracking 到远分支？❤️ ？
+	4>如果已有 tracking 的分支已经没有可推送的信息，则会提醒 push 方式。
+    5>git push --force：重写(overwrite)历史
+
+△git branch
+	不同分支之间的关系:在分支之间切换的时候，每次的切换，工作区的代码都是与相应分支的版本库代码是一样的(git stash 除外)。（如果强制切换，暂存库和工作区的内容将被新分支所覆盖。❤️确定？）所以一个 git clone下来的代码，对应于分支，代码版本不尽相同。（remind:git 记录的是改变）即便是 tracking 到某分支的分支，其中的内容也需要手动去远程下载代码，才能与远程分支保持一致。
+	git branch —set-upstream-to=origin/<branch> [本分知名]❤️ the detail of the behavior？
+    
+△git rebase 衍合
+    相当于回溯到两者的共同 ancestor，然后获取当下分支 commit 的所有 diff，并把这些 diffs 存成临时文件(files)，然后把当前分支reset 到(把头 HEAD 在版本库中的指向移到)所要 rebase 的分支的一样的 commit，最后依次应用每个改变。
+    git rebase 可以让分支操作历史线路变得更清晰明朗。如果觉得功能分支上的提交历史太乱了，可以用交互式rebase来删除或压制提交。对于大型项目，整理功能分支的历史可以让项目维护者更容易看出在Pull Request中做了什么内容。
+    eg 1：
+        git checkout experiment//切到 experiment 分支，
+        git rebase master//把experiment自身的 commits 打成补丁，重应用到 master 分支的最新 commit 版本上。退回到共同始祖点(ancestor)，并入 master 的提交，并把从该点起的 experiment 的 commits 依次保存成 diffs files（补丁），再在 master 的commits 最顶版本依次合并experiment分支的 diffs files。
+        git checkout master
+        git merge experiment//切回主分支 master，然后把 experiment 合并到主分支上，这样不会产生任何冲突。
+    eg2:
+        git rebase --onto master server client//切分支 client，并挑出从server 和 client 俩分支的共同始祖到当前 client 提交（打成补丁)，并应用到 master 分支上。
+        git checkout master//
+        git merge client//切到 master，使用快速合并(fast-forward)合并模式将 client 分支并到 master。（问题：client 分支在图形界面中表现为在 master 一条线上？不会，如果想要图形界面上没有延展未并入分支，则需要后面删掉 client 分支）
+        git branch -d client
+    命令：
+        git rebase [basebranch] [topicbranch]：将后者提交版本打成补丁应用到 basebranch的最新 commit 版本(top of your basebranch work)。
+    注意：不要你仓库之外的 commit 进行 rebase 操作。
+        如果你把 rebase 作为一个用于清理的方法，那么在你最好在 push 之前把 commits 相关工作做完，否则，除非你的rebase commits永远不公开使用，那还好。如果你衍合已经提交公开的 commits，你肯定会被人骂十三的。
+    远仓操作：
+        git rebase [remotename]/[remotebranchname];
+        如果你所基于的代码(you’ve based work on)发生强行重写推送，你需要区分出你的代码和被重写的代码。git 不仅提供了 commit 的哈希校验号，还计算了一个基于补丁所关联的 commit 的校验号(a checksum that is based on the patch introduced with the commit)，被称为“patch-id”.如果你pull了远程的代码，而代码相较于之前的被伙伴重写，并且从最新提交 rebase 过。Git 通常可以成功取出(识别)你的代码，并把它们重应用回新分支的顶端。使用命令：
+            git rebase [remotename]/[branchname]。
+        Git 会作如下工作：
+            1>查清哪些工作是独立于我们的分支的。（独立于分支的是啥意思？）
+            2>查清哪些个不是合并的提交。（每次合并并不会产生一次提交，mark！）
+            3>查清哪个分支不需要重写到目标分支。
+            4>把那些提交应用到远程分支的最上层(to the top of [remotename]/[branchname])。
+        真正实例操作中可以先 git fetch下载远程代码，然后运行git rebase [remotename]/[remotebranchname]把远程代码和本地代码合起来。
+        除了 git rebase，还可以用 git pull --rebase。
+
+    下载代码的可以弥补其他成员对远程服务的rewritten 式的推送(v1-v2-v3-v2中间存在版本回归)。
+        git rebase --rebase
+    
+△git fetch
+	在本地分支中，想要下载远仓分支代码，可以通过 git fetch [远仓分支名].如果已经 tracking 到远程分支，则无需远仓名。
+    每次 git fetch,本地都会建立一个临时分支。如果拉代码时，刚好拉的是临时分支的代码，则需要将其与目标分支合并，然后将其删掉，这其中要相当注意冲突问题。可以在 sourceTree 中查看和对比diff。
+    倘若有人在远程
+△git merge
+    合并分三种方式： 一，commit线上的前版本合并到后版本（如所要合并的分支其实和当前分支是在同一个始祖上，只是 HEAD指向更新的 commit。使用命令：git merge <branchname>），则会通过移动 HEAD 指向 commit id 的方式来完成，使用 fast forward 模式。
+    二，针对两分支从同一个始祖（ancestor）分出来，任意一方存在改动的情况，使用 git merge 命令。此时 git 通过新创建一个 b新的数据快照(snapshot) 和 commit 来完成合并。
+    三，若有一个主干 ancestor 分出两个分支，假设分别为 master、develop，master 和 develop分别都有添加了不同的 commit 任务。此时如果想要把 develop 并入 master后再进行开发，则可以通过 rebase 命令把 develop 的提交打成补丁再应用到分支 master上。
+    merge后，被并入的 commit 历史也一并进入当前分支历史。    
+	----------------------git 研究强化 end demanding to sort out----------------
+
+p.s 需要整理的:
+每个文件都有对应的版本号(snapshot)。每个 commit 对象中是否对文件的版本号经行相应指向？
+
+
+git checout -- . 清工作区修改
+git checkout -- node-app/i18n/en.json清理工作区中指定文件的修改
+git branch -u origin/<remotebranchname>
+
+
+pull 之前，三区相同。每次 pull 的代码合并的是工作区的代码，而暂存区和版本区没有变化。×
+pull:
+	fetch:
+	merge:新的修改提交将被放在 staged 中。冲突的放在工作区。
+		如果没有冲突，git 自动生成一个 commit。
+
+
+
+git checkout -b localbranchname origin/<remotebranchname> //可以直接将工作区和版本区的代码下载到远程的最新 commit 状态，而非继承当下代码的状态。
+
+##has been recorded##git commit -am ""//add + commit
+
+工作区不变，改变 HEAD 指针所指 commitid。
+	git reset --soft commitid 不改变 staged 状态。
+git reset --hard commitid 强行将当前staged区指向 commitid
+	git reset :
+		没有参数 撤销 staged 中所有文件大改动
+		<file> 撤销某文件
+		<commitid>回归到版本库对应 commitid 的状态。
+		--soft 只是改 仓库里面 HEAD 的指向,不改 staged 中的状态。
+		--hard 修改 staged 中的状态，同时同化工作区。
+
+
+git reset --hard commitid 强制把版本区、工作区的代码替换到 commitid 对应的代码状态。
+git cherry-pick commitid 取 commitid 中的改动应用到当前代码
+
+关联：
+	git push remotename localbranch:remotebranch;（远分没有则新建）
+	git branch -u origin/remotebranchname
+
+
+开分支：记录当下分支的提交记录，避免记录里面别人的 commid 影响。
+ fetch: 拉下所有的 commit 对象，包括文件的 snapshot。
+ git branch -vv 对比的是 fetch下来的远端分支 中的 commit 和 本地分支repository 所指的 commit。
+合并：无冲突，则在版本库中保存合并结果。冲突，则将冲突放在工作区等待修改，非冲突部分放在暂存区。
+	fast-forward：版本的跳转。
+改指针： merge 和 reset.git reset
+主动 rebase(rebase)的分支
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+·△git 配置：
+git config --global --edit
+修改配置后，重新提交：git commit --amend --reset-author
+git config --global user.name <username> 设置全局名称和email。对仓库的某些操作需要用户名和密码，可以通过将用户名和 密码 放在 remote url 的地址（初始 clone 的地址中添加，或 local cofig 中添加，如 git config --local remote.origin.url） 中：
+    remote.origin.url=http://ling.cheng:mypassword@git.dianrong.com/banking/frontend.git
+    参数：
+        全局设置为--global，本地设置--local。
+git config --list查看config 信息，默认全局。查看本地：git config --local --list
+通过 config 为一些命令设置化名：
+    git config --global alias.tree "log --all --graph --decorate --oneline" 
+
+△gitlab
+git checkout origin/dev
+1>是否需要在主分支上合并 tem branch?然后处理合并冲突。
+2>远程私人分支是否 tracking 到主分支？其是否会实时更新到主分支上的所有分支更新？
+git fork 将代码fork一份到自己的仓库地址中，作为自己开发使用的仓库地址。
+可以对这份代码创建分支等
+提交上线之前：git fetch —all;进行仓库代码拉图，获取线上的版本代码，并且将线上的代码合并到自己本地分支上。在解决冲突后，再次合并代码，若木有问题后 push 到 gitlab 中。
+git lab end>>>>
+
+
+△示例：
+当操作过程中不慎没有添加提交说明，则会弹出rim以供编辑说明，但是中间强制退出，后面再提交则会弹出如下提示：
+recover the changes(see ":help recovery")
+(1) Another program may be editing the same file.  If this is the case,
+    be careful not to end up with two different instances of the same
+    file when making changes.  Quit, or continue with caution.
+(2) An edit session for this file crashed.
+    If this is the case, use ":recover" or "vim -r D:/web/ccsite/celine/gitstudy
+/.git/COMMIT_EDITMSG"
+    to recover the changes (see ":help recovery").
+    If you did this already, delete the swap file "D:/web/ccsite/celine/gitstudy
+/.git/.COMMIT_EDITMSG.swp"
+    to avoid this message.
+2,gitstudy中建的仓库配置为：
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+#       name = CelineCheng
+#       email = R9NF1CP@Celine-PC.(none)
+
+
+
+
+
+
+
+
+△ssh：
+Git没有客户端服务器端的概念，但是要共享Git仓库，就需要用到SSH协议（FTP , HTTPS , SFTP等协议也能实现Git共享，此文档不讨论），但是SSH有客户端服务器端，所以在windows下的开发要把自己的Git仓库共享出去的话，就必 须做SSH服务器。 
+集成SSH框架的系统从职责上分为四层：表示层、业务逻辑层、数据持久层和域模块层，以帮助开发人员在短期内搭建结构清晰、可复用性好、维护方便的Web应用程序。
+中使用Struts作为系统的整体基础架构，负责MVC的分离，在Struts框架的模型部分，控制业务跳转，利用Hibernate框架对持久层提供支持，Spring做管理，管理struts和hibernate。具体做法是：用面向对象的分析方法根据需求提出一些模型，将这些模型实现为基本的Java对象，然后编写基本的DAO(Data Access Objects)接口，并给出Hibernate的DAO实现，采用Hibernate架构实现的DAO类来实现Java类与数据库之间的转换和访问，最后由Spring做管理，管理struts和hibernate。
+<img src="http://f.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=a05dc6279158d109d0eea1e0b031a7da/377adab44aed2e73f6dd23758401a18b87d6fab7.jpg">
+
+
+git支持多种传输协议：
+https:// 协议，不过你也可以使用 git:// 协议或者使用 SSH 传输协议，比如 user@server:path/to/repo.git
+
+文件 .gitignore 的格式规范如下：
+	所有空行或者以 ＃ 开头的行都会被 Git 忽略。
+	可以使用标准的 glob 模式匹配。
+	匹配模式可以以（/）开头防止递归。
+	匹配模式可以以（/）结尾指定目录。
+	要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。
