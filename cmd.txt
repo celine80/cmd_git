@@ -1,0 +1,40 @@
+△bash cmd
+md 创建文件夹
+rd 删除文件夹
+rm 删除文件和文件夹
+    删除非空目录：rm [options] dirname
+    参数 [options]：
+        -i 删除前逐一询问确认。 
+        -f 即使原档案属性设为唯读，亦直接删除，无需逐一确认。 
+        -r 将目录及以下之档案亦逐一删除。
+		sample:rm -rf node_modules
+mkdir 创建目录
+rmdir [-p] dirName 
+    参数： -p 是当子目录被删除后使它也成为空目录的话，则顺便一并删除。 
+mkdir folderName
+pwd：命令用于显示当前目录
+ls -ah：MAC中显示隐藏目录
+cat <text file name>：直接读取文件，如$ cat readme.txt。
+vim [filename] 编辑文件
+rm <file>：删除文件。
+mv aaa.pdf bbb.pdf mv命令是move的缩写,可以用来移动文件或者将文件改名(move (rename) files)
+	命令参数：
+	-b ：若需覆盖文件，则覆盖前先行备份。 
+	-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；
+	-i ：若目标文件 (destination) 已经存在时，就会询问是否覆盖！
+	-u ：若目标文件已经存在，且 source 比较新，才会更新(update)
+	-t  ： --target-directory=DIRECTORY move all SOURCE arguments into DIRECTORY， 即指定mv的目标目录， 该选项适用于移动多个源文件到一个目录的情况， 此时目标目录在前， 源文件在后。
+字符串参数中如果没有空格可以不用加引号？
+
+△路径跳转
+d: 转到d盘
+cd path 转到同一个硬盘的路径中
+dir 是查看：例：dir f:\  就是显示F盘下的文件和文件夹
+del  删除文件 这是一个删除文件命令
+help lookup others
+
+△macosx cmd
+解压缩文件：tar -zxvf mongodb-osx-x86_64-3.2.3.tgz
+拷贝文件中的文本 pbcopy < ~/.ssh/id_rsa.pub
+删除文件夹：rmdir dirname
+
